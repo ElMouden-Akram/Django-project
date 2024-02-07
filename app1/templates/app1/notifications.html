@@ -6,7 +6,7 @@
       
   <table class="table table-sm">
     <tr>
-      <th>admin</th>
+      <th>Emeteur</th>
       <th>message</th>
       <th>date</th>
     </tr>
@@ -15,7 +15,7 @@
         {% if notification.adminstrateur.id == 2 %}
         <td>system</td>
         {% else %}
-           <td>{{ notification.adminstrateur.fk_user.username }}</td>
+           <td>Administrateur</td>
        {% endif %}
     
         <td>{{notification.message}}</td>

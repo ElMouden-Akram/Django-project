@@ -94,7 +94,6 @@
         {% if not user.is_authenticated %}
             <li class="nav-item cta"><a href="{% url 'login' %}" class="nav-link"><span>Se connecter</span></a></li>
         {% else %}
-            <li class="nav-item active"><a href="{% url 'client'  %}" class="nav-link">Profile</a></li>
             <li class="nav-item cta"><a href="{% url 'logout' %}" class="nav-link"><span>Se déconnecter</span></a></li>
         {% endif %}
         </ul>
@@ -151,67 +150,75 @@
                               <p class="card-text" style="padding-left:5px"><span class="field-value">Numero tel.:</span> {{ request.user.client.telephone }}</p>
                               <p class="card-text" style="padding-left:5px"><span class="field-value">Sexe:</span> {{ request.user.client.sexe }}</p>
                               <p class="card-text" style="padding-left:5px"><span class="field-value">Adresse:</span> {{ request.user.client.adresse }}</p>
-                              <a class="btn btn-warning" style="
-                              position: absolute;
-                              bottom: 10px;
-                              right: 20px;
-                          " href="{% url 'ClientSettings' %}">Modifier profile</a>
+                              <a class="btn btn-secondary" style="position: absolute;bottom: 10px;right: 20px;" href="{% url 'ClientSettings' %}">Modifier profile</a>
                             </div>
                           </div>
                         </div>
                     
                         <!-- Hotel Details Card -->
-                      <div class="row" style="margin: 2% auto">
-                        <div class="col-md-4 mx-auto">
+                      {% comment %} <div class="row" style="margin: 2% auto"> {% endcomment %}
+                        <div class="col-md-9 mx-auto " style="margin: 2% auto">
                           <div class="card" style="box-shadow: 0 0 0;">
                             <div class="card-body">
-                              <h2 class="card-title">Vol Hotel</h2>
-                              <img class="card-img-top" src="{{ voyage.hotel.hotel_image.url }}" alt="{{ voyage.hotel.nom }} Image">
-                              <p class="card-text"><span class="field-value">Nom:</span> {{ voyage.hotel.nom }}</p>
-                              <p class="card-text"><span class="field-value">Nombre d'Étoiles:</span> 
-                              {% if 5 == voyage.hotel.nbr_etoiles %}
-                              <span style="font-size: 1.2em; color: red;">
-                                <i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i>
-                              </span>
-                              {% elif 4 == voyage.hotel.nbr_etoiles %}
-                              <span style="font-size: 1.2em; color: red;">
-                                <i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star-o"></i>
-                              </span>
-                              {% elif 3 == voyage.hotel.nbr_etoiles %}
-                              <span style="font-size: 1.2em; color: red;">
-                                <i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star-o"></i><i class="icon-star-o"></i>
-                              </span>
-                              {% elif 2 == voyage.hotel.nbr_etoiles %}
-                              <span style="font-size: 1.2em; color: red;">
-                                <i class="icon-star"></i><i class="icon-star"></i><i class="icon-star-o"></i><i class="icon-star-o"></i><i class="icon-star-o"></i>
-                              </span>
-                              {% elif 1 == voyage.hotel.nbr_etoiles %}
-                              <span style="font-size: 1.2em; color: red;">
-                                <i class="icon-star"></i><i class="icon-star-o"></i><i class="icon-star-o"></i><i class="icon-star-o"></i><i class="icon-star-o"></i>
-                              </span>
-                              {% endif %}
+                                <h4 class="card-title" style="text-decoration:underline;">Mes notification:</h4>
+                                <table class="table table-sm">
+                                    <tr>
+                                      <th>Emeteur</th>
+                                      <th>message</th>
+                                      <th>date</th>
+                                    </tr>
+                                    {%for notification in notifications%}
+                                      <tr>
+                                        {% if notification.adminstrateur.id == 2 %}
+                                        <td>system</td>
+                                        {% else %}
+                                           <td>Administrateur</td>
+                                       {% endif %}
+                                    
+                                        <td>{{notification.message}}</td>
+                                        <td>{{notification.timestamp}}</td>      
+                                      </tr>
+                                      {%endfor%}
+                                  </table>
+                                <a class="btn btn-secondary" style="position: absolute;bottom: 10px;right: 20px;" href="{% url 'notifications' %}">Voir plus</a>
                             </div>
                           </div>
                         </div>
                     
-                        <!-- Vol Information Card -->
-                        <div class="col-md-4 mx-auto">
+                        <!-- Mes reservation -->
+                        <div class="col-md-10 mx-auto">
                           <div class="card" style="box-shadow: 0 0 0;">
                             <div class="card-body">
-                              <h2 class="card-title">Vol Information</h2>
-                              <p class="card-text"><span class="field-value">Titre:</span> {{ voyage.vol.titre }}</p>
-                              <p class="card-text"><span class="field-value">Date Depart:</span> {{ voyage.vol.date_depart }}</p>
-                              <p class="card-text"><span class="field-value">Date Arrive:</span> {{ voyage.vol.date_arrive }}</p>
-                              <p class="card-text"><span class="field-value">Compagnie:</span> {{ voyage.vol.compagnie }}</p>
-                              <p class="card-text"><span class="field-value">Classe:</span> {{ voyage.vol.classe }}</p>
-                              <p class="card-text"><span class="field-value">Escale:</span> {{ voyage.vol.escale }}</p>
-                              <p class="card-text"><span class="field-value">Ville Arrive:</span> {{ voyage.vol.ville_arrive }}</p>
-                              <p class="card-text"><span class="field-value">Ville Depart:</span> {{ voyage.vol.ville_depart }}</p>
-                              <p class="card-text"><span class="field-value">Nombre d'Heures:</span> {{ voyage.vol.nbr_heure }}</p>
+                              <h4 class="card-title" style="text-decoration:underline;">Mes reservation :</h4>
+      
+                                <table class="table table-sm">
+                                  <tr>
+                                    <th>id</th>
+                                    <th>client</th>
+                                    <th>voyage</th>
+                                    <th>amountPaid</th>
+                                    <th>paymentStatus</th>
+                                    <th>facture</th>
+                                  </tr>
+                                  {%for reservation in reservations%}
+                                    <tr>
+                                      <td>{{reservation.id}}</td>
+                                      <td>{{reservation.fk_client}}</td>
+                                      <td>{{reservation.fk_voyage}}</td>
+                                      <td>{{reservation.amountPaid}}</td>
+                                      <td>{{reservation.paymentStatus}}</td>
+                                      <td><a href="{% url 'download_pdf' reservation.id %}" class="btn btn-primary">Download Reservation PDF</a></td>
+                                     
+                                    </tr>
+                                    {%endfor%}
+                                </table>
+                               <a class="btn btn-secondary" style="position: absolute;bottom: 10px;right: 20px;" href="{% url 'reservationclient' request.user.client.id%}">Voir plus</a>
+                            
+                          
                             </div>
                           </div>
                         </div>
-                      </div>
+                      {% comment %} </div> {% endcomment %}
                       </div>
                     </div>
                     {% if user.is_authenticated %}
@@ -337,5 +344,5 @@
   <script>
 
     
-  </body>
+  </body>
 </html>

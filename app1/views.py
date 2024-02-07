@@ -93,13 +93,17 @@ def register(request): #
 @login_required(login_url='home') #ila makanch mconecti aymchi l home
 @allowed_users(allowed_roles=['client']) #katkhli ghir clients homa li ydkhlo t9dr tbdl roles kima bghiti 3la 7sab groups 
 def ClientPage(request): 
-    # voyages = Voyage.objects.all()
     user = request.user
-    print(voyages)  
-    # breakpoint() 
-
-    context ={'user':user}
+    #for notifications :
+    id_user = request.user.id
+    client = get_object_or_404(Client, fk_user=id_user)
+    notifications = Notification.objects.filter(client=client)[:3]
+    #for reservations :
+    reservations =Client_voyage.objects.filter(fk_client=client.id)[:3]
+    
+    context ={'user':user, 'notifications': notifications , 'reservations':reservations}
     return render(request , 'app1/ClientPage.html',context)
+
 
 
 @login_required(login_url='home') 
